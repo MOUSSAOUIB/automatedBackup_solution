@@ -1,0 +1,5 @@
+---
+- name: Test remote_host
+  debug:
+    var: remote_host
+

@@ -1,0 +1,24 @@
+---
+- hosts: mtas
+  become: yes
+  tasks:
+    - name: Ensure SSH key exists on server2
+      openssh_keypair:
+        path: /root/.ssh/id_rsa
+        state: present
+
+    - name: Fetch public key from server2
+      fetch:
+        src: /root/.ssh/id_rsa.pub
+        dest: /tmp/server2_id_rsa.pub
+        flat: yes
+
+- hosts: bakup_servers
+  become: yes
+  tasks:
+    - name: Set authorized key on 10.128.230.13
+      authorized_key:
+        user: admin
+        state: present
+        key: "{{ lookup('file', '/tmp/server2_id_rsa.pub') }}"
+

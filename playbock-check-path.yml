@@ -1,0 +1,12 @@
+---
+- name: Ensure remote backup paths exist on backup servers
+  hosts: mtas:cscf:idns:nels
+  gather_facts: no
+  tasks:
+    - name: Ensure remote backup path exists on the backup server
+      file:
+        path: "{{ remote_backup_path }}"
+        state: directory
+        mode: '0755'
+      delegate_to: "{{ item }}"
+      loop: "{{ groups['bakup_servers'] }}"

@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Ensure the directory /root/moussaoui exists
+      file:
+        path: /root/moussaoui
+        state: directory
+        mode: '0777'
+
+    - name: Copy the shell script to /root/moussaoui
+      copy:
+        src: /home/moussaoui/ansible/script.sh
+        dest: /root/moussaoui/script.sh
+        mode: '0777'
+
+    - name: Set up a cron job to run the script daily
+      cron:
+        name: "Run my script v2"
+        job: "/root/moussaoui/script.sh"
+        minute: "*/5"
+        hour: "*"
+        day: "*"
+        month: "*"
+        weekday: "*"
+
+
