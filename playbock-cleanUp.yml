@@ -1,0 +1,24 @@
+---
+- hosts: nels
+  tasks:
+    - name: Ensure the directory /root/moussaoui exists
+      file:
+        path: /root/moussaoui
+        state: directory
+        mode: '0777'
+    - name: Create script from template
+      template:
+        src: cleanUp.sh
+        dest: /root/moussaoui/cleanUp.sh
+        mode: '0777'
+        
+    - name: Set up a cron job to run the script daily
+      cron:
+       name: "Run my cleanUp script"
+       job: "/root/moussaoui/cleanUp.sh"
+       minute: "0"
+       hour: "2"
+       day: "*"
+       month: "*"
+       weekday: "5"
+
